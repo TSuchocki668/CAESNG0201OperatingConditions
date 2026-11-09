@@ -11,7 +11,10 @@
   text { font-family: Georgia, serif; }
   .node { cursor: pointer; }
   .node rect, .node text { pointer-events: all; }
-  .node:hover rect { filter: brightness(0.93); }
+  .node:hover rect, .node:focus rect { filter: brightness(0.93); }
+  .node:focus { outline: none; }
+  .node:focus rect { stroke-width: 3; }
+  @media print { .screen-only, #panel { display: none !important; } }
 
   #panel {
     display: none;
@@ -30,6 +33,8 @@
   @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
   #panel h2 { margin: 0 0 6px; font-size: 17px; }
   #panel p { margin: 0; }
+  #panel #panel-link { margin-top: 10px; font-style: italic; }
+  .node.linked rect { stroke-width: 3.5; stroke-dasharray: 5 3; }
   #panel .label { font-size: 11px; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 4px; font-family: sans-serif; font-weight: 600; }
   #close-btn {
     position: absolute; top: 12px; right: 16px;
@@ -41,7 +46,9 @@
 </head>
 <body>
 
-<svg viewBox="0 0 680 530" xmlns="http://www.w3.org/2000/svg" id="diagram">
+<svg viewBox="0 0 680 530" xmlns="http://www.w3.org/2000/svg" id="diagram" role="group" aria-labelledby="svgTitle svgDesc">
+  <title id="svgTitle">The Six Operating Conditions</title>
+  <desc id="svgDesc">A hexagon of six labeled conditions surrounds an image of Earth. Sunlight is at the top, then clockwise Water, Cycles, Dynamic non-equilibrium, Limits, and Gravity. Faint lines join every condition to every other. Each label opens a short explanation and highlights the lines to two conditions it works with.</desc>
   <defs>
     <clipPath id="earthClip">
       <circle cx="340" cy="283" r="68"/>
@@ -54,20 +61,24 @@
 
   <!-- Title -->
   <text x="340" y="36" text-anchor="middle" font-size="17" font-weight="700" fill="#1a1a1a" letter-spacing="0.3">The Six Operating Conditions</text>
-  <text x="340" y="56" text-anchor="middle" font-size="12" fill="#555">Earth's integrated system for life — click any condition to explore</text>
+  <text x="340" y="56" text-anchor="middle" font-size="12" fill="#1a1a1a" class="screen-only">Select any condition to learn more</text>
 
-  <!-- Hexagon ring -->
-  <line x1="340" y1="118" x2="490" y2="200" stroke="#bbb" stroke-width="1"/>
-  <line x1="490" y1="200" x2="490" y2="358" stroke="#bbb" stroke-width="1"/>
-  <line x1="490" y1="358" x2="340" y2="440" stroke="#bbb" stroke-width="1"/>
-  <line x1="340" y1="440" x2="190" y2="358" stroke="#bbb" stroke-width="1"/>
-  <line x1="190" y1="358" x2="190" y2="200" stroke="#bbb" stroke-width="1"/>
-  <line x1="190" y1="200" x2="340" y2="118" stroke="#bbb" stroke-width="1"/>
-
-  <!-- Diagonal spokes -->
-  <line x1="340" y1="118" x2="340" y2="440" stroke="#ddd" stroke-width="0.8"/>
-  <line x1="490" y1="200" x2="190" y2="358" stroke="#ddd" stroke-width="0.8"/>
-  <line x1="490" y1="358" x2="190" y2="200" stroke="#ddd" stroke-width="0.8"/>
+  <!-- Every condition connects to every other; selected links are highlighted -->
+  <line class="link" data-a="sunlight" data-b="water" x1="340" y1="118" x2="490" y2="200" stroke="#e2e2e2" stroke-width="1"/>
+  <line class="link" data-a="sunlight" data-b="cycles" x1="340" y1="118" x2="490" y2="358" stroke="#e2e2e2" stroke-width="1"/>
+  <line class="link" data-a="sunlight" data-b="dynamic" x1="340" y1="118" x2="340" y2="440" stroke="#e2e2e2" stroke-width="1"/>
+  <line class="link" data-a="sunlight" data-b="limits" x1="340" y1="118" x2="190" y2="358" stroke="#e2e2e2" stroke-width="1"/>
+  <line class="link" data-a="sunlight" data-b="gravity" x1="340" y1="118" x2="190" y2="200" stroke="#e2e2e2" stroke-width="1"/>
+  <line class="link" data-a="water" data-b="cycles" x1="490" y1="200" x2="490" y2="358" stroke="#e2e2e2" stroke-width="1"/>
+  <line class="link" data-a="water" data-b="dynamic" x1="490" y1="200" x2="340" y2="440" stroke="#e2e2e2" stroke-width="1"/>
+  <line class="link" data-a="water" data-b="limits" x1="490" y1="200" x2="190" y2="358" stroke="#e2e2e2" stroke-width="1"/>
+  <line class="link" data-a="water" data-b="gravity" x1="490" y1="200" x2="190" y2="200" stroke="#e2e2e2" stroke-width="1"/>
+  <line class="link" data-a="cycles" data-b="dynamic" x1="490" y1="358" x2="340" y2="440" stroke="#e2e2e2" stroke-width="1"/>
+  <line class="link" data-a="cycles" data-b="limits" x1="490" y1="358" x2="190" y2="358" stroke="#e2e2e2" stroke-width="1"/>
+  <line class="link" data-a="cycles" data-b="gravity" x1="490" y1="358" x2="190" y2="200" stroke="#e2e2e2" stroke-width="1"/>
+  <line class="link" data-a="dynamic" data-b="limits" x1="340" y1="440" x2="190" y2="358" stroke="#e2e2e2" stroke-width="1"/>
+  <line class="link" data-a="dynamic" data-b="gravity" x1="340" y1="440" x2="190" y2="200" stroke="#e2e2e2" stroke-width="1"/>
+  <line class="link" data-a="limits" data-b="gravity" x1="190" y1="358" x2="190" y2="200" stroke="#e2e2e2" stroke-width="1"/>
 
   <!-- Earth image from GitHub -->
   <image
@@ -82,131 +93,165 @@
   <circle cx="340" cy="283" r="68" fill="none" stroke="#94a3b8" stroke-width="1.5"/>
 
   <!-- SUNLIGHT (top) -->
-  <g class="node" data-id="sunlight">
+  <g class="node" data-id="sunlight" role="button" tabindex="0" aria-label="Sunlight" aria-controls="panel">
     <rect x="272" y="90" width="136" height="56" rx="10" fill="#FEF3C7" stroke="#D97706" stroke-width="1.5"/>
-    <text x="340" y="114" text-anchor="middle" font-size="14" font-weight="700" fill="#92400E">Sunlight</text>
-    <text x="340" y="132" text-anchor="middle" font-size="11" fill="#B45309">energy input</text>
+    <text x="340" y="114" text-anchor="middle" font-size="14" font-weight="700" fill="#1a1a1a">Sunlight</text>
+    <text x="340" y="132" text-anchor="middle" font-size="11" fill="#1a1a1a">energy input</text>
   </g>
 
   <!-- WATER (upper right) -->
-  <g class="node" data-id="water">
+  <g class="node" data-id="water" role="button" tabindex="0" aria-label="Water" aria-controls="panel">
     <rect x="422" y="172" width="136" height="56" rx="10" fill="#DBEAFE" stroke="#2563EB" stroke-width="1.5"/>
-    <text x="490" y="196" text-anchor="middle" font-size="14" font-weight="700" fill="#1E3A8A">Water</text>
-    <text x="490" y="214" text-anchor="middle" font-size="11" fill="#1D4ED8">universal solvent</text>
+    <text x="490" y="196" text-anchor="middle" font-size="14" font-weight="700" fill="#1a1a1a">Water</text>
+    <text x="490" y="214" text-anchor="middle" font-size="11" fill="#1a1a1a">life's solvent</text>
   </g>
 
   <!-- CYCLES (lower right) -->
-  <g class="node" data-id="cycles">
+  <g class="node" data-id="cycles" role="button" tabindex="0" aria-label="Cyclic processes" aria-controls="panel">
     <rect x="422" y="330" width="136" height="56" rx="10" fill="#CCFBF1" stroke="#0D9488" stroke-width="1.5"/>
-    <text x="490" y="354" text-anchor="middle" font-size="14" font-weight="700" fill="#134E4A">Cycles</text>
-    <text x="490" y="372" text-anchor="middle" font-size="11" fill="#0F766E">matter returns</text>
+    <text x="490" y="354" text-anchor="middle" font-size="14" font-weight="700" fill="#1a1a1a">Cycles</text>
+    <text x="490" y="372" text-anchor="middle" font-size="11" fill="#1a1a1a">rhythms and loops</text>
   </g>
 
   <!-- DYNAMIC NON-EQUILIBRIUM (bottom) -->
-  <g class="node" data-id="dynamic">
+  <g class="node" data-id="dynamic" role="button" tabindex="0" aria-label="Dynamic non-equilibrium" aria-controls="panel">
     <rect x="248" y="410" width="184" height="60" rx="10" fill="#EDE9FE" stroke="#7C3AED" stroke-width="1.5"/>
-    <text x="340" y="433" text-anchor="middle" font-size="14" font-weight="700" fill="#4C1D95">Dynamic</text>
-    <text x="340" y="450" text-anchor="middle" font-size="14" font-weight="700" fill="#4C1D95">non-equilibrium</text>
-    <text x="340" y="464" text-anchor="middle" font-size="11" fill="#6D28D9">constant change</text>
+    <text x="340" y="433" text-anchor="middle" font-size="14" font-weight="700" fill="#1a1a1a">Dynamic</text>
+    <text x="340" y="450" text-anchor="middle" font-size="14" font-weight="700" fill="#1a1a1a">non-equilibrium</text>
+    <text x="340" y="464" text-anchor="middle" font-size="11" fill="#1a1a1a">continual change</text>
   </g>
 
   <!-- LIMITS (lower left) -->
-  <g class="node" data-id="limits">
+  <g class="node" data-id="limits" role="button" tabindex="0" aria-label="Limits and boundaries" aria-controls="panel">
     <rect x="122" y="330" width="136" height="56" rx="10" fill="#FFE4E6" stroke="#E11D48" stroke-width="1.5"/>
-    <text x="190" y="354" text-anchor="middle" font-size="14" font-weight="700" fill="#881337">Limits</text>
-    <text x="190" y="372" text-anchor="middle" font-size="11" fill="#BE123C">finite resources</text>
+    <text x="190" y="354" text-anchor="middle" font-size="14" font-weight="700" fill="#1a1a1a">Limits</text>
+    <text x="190" y="372" text-anchor="middle" font-size="11" fill="#1a1a1a">finite resources</text>
   </g>
 
   <!-- GRAVITY (upper left) -->
-  <g class="node" data-id="gravity">
+  <g class="node" data-id="gravity" role="button" tabindex="0" aria-label="Gravity" aria-controls="panel">
     <rect x="122" y="172" width="136" height="56" rx="10" fill="#F1F5F9" stroke="#475569" stroke-width="1.5"/>
-    <text x="190" y="196" text-anchor="middle" font-size="14" font-weight="700" fill="#1E293B">Gravity</text>
-    <text x="190" y="214" text-anchor="middle" font-size="11" fill="#475569">structuring force</text>
+    <text x="190" y="196" text-anchor="middle" font-size="14" font-weight="700" fill="#1a1a1a">Gravity</text>
+    <text x="190" y="214" text-anchor="middle" font-size="11" fill="#1a1a1a">structuring force</text>
   </g>
 
   <!-- Footer -->
-  <text x="340" y="510" text-anchor="middle" font-size="10" fill="#999">Environmental Science through Nature's Genius</text>
+  <text x="20" y="510" text-anchor="start" font-size="10" fill="#1a1a1a">Environmental Science through Nature's Genius</text>
+  <text x="660" y="510" text-anchor="end" font-size="10" fill="#1a1a1a">Framework adapted from Biomimicry 3.8</text>
 </svg>
 
-<div id="panel">
-  <button id="close-btn" onclick="closePanel()">×</button>
+<div id="panel" role="region" aria-live="polite" aria-labelledby="panel-title">
+  <button id="close-btn" onclick="closePanel()" aria-label="Close explanation">×</button>
   <div class="label" id="panel-label"></div>
   <h2 id="panel-title"></h2>
   <p id="panel-body"></p>
+  <p id="panel-link"></p>
 </div>
 
 <script>
 const data = {
   sunlight: {
     label: "Energy Input",
+    linkTo: ["cycles", "water"],
+    link: "Connects with cyclic processes and water. Days and seasons ration sunlight, so many organisms time growth, flowering, and migration to its rhythm, and sunlight drives the evaporation that keeps water moving.",
     title: "Sunlight",
     color: "#92400E",
     border: "#D97706",
     bg: "#FFFBEB",
-    body: "Nearly all energy flowing through Earth's living systems begins as sunlight. Photosynthesis captures that solar energy and locks it into chemical bonds — the same energy a caterpillar accesses when it chews a leaf, and the same energy released when a fire burns through a forest. Organisms from Arctic poppies to deep-sea bacteria have refined strategies for capturing, concentrating, and channeling light energy across billions of years of evolution."
+    body: "Sunlight powers nearly all life on Earth. Plants, algae, and photosynthetic bacteria capture light energy and store it in sugars. That energy moves through food webs. The energy in a caterpillar's leaf, and in the bird that eats the caterpillar, began as sunlight."
   },
   water: {
-    label: "Universal Solvent",
+    label: "Life's Solvent",
+    linkTo: ["sunlight", "gravity"],
+    link: "Connects with sunlight and gravity. Sunlight drives evaporation, lifting water into the air, and gravity returns it as rain and runoff.",
     title: "Water",
     color: "#1E3A8A",
     border: "#2563EB",
     bg: "#EFF6FF",
-    body: "Water is the medium in which virtually every biochemical reaction takes place. Its unique molecular properties — hydrogen bonding, remarkable surface tension, high specific heat — make it irreplaceable for life as we know it. From the kangaroo rat that extracts water from dry seeds through metabolic chemistry, to the fog-harvesting Namib beetle, organisms across Earth's driest environments demonstrate just how precisely life works within water's possibilities and constraints."
+    body: "Every organism keeps a water budget, balancing water gained against water lost. A desert rodent, a freshwater fish, and an ocean fish face that balance from different directions. The rodent must hold on to scarce water, the freshwater fish must shed extra water, and the ocean fish must replace water lost to salty surroundings."
   },
   cycles: {
-    label: "Matter Returns",
+    label: "Rhythms and Loops",
+    linkTo: ["limits", "sunlight"],
+    link: "Connects with limits and boundaries and with sunlight. Limited matter must be reused, so cycles keep life supplied, and the Sun's daily and yearly rhythms set the pace of many of them.",
     title: "Cyclic Processes",
     color: "#134E4A",
     border: "#0D9488",
     bg: "#F0FDFA",
-    body: "Matter on Earth cycles endlessly — carbon, nitrogen, phosphorus, and water move through living organisms, soils, atmosphere, and oceans in continuous loops. Nothing is wasted; everything is borrowed and returned. The carbon atoms in the breath you just exhaled have passed through ancient forests, ocean creatures, and soil microbes across billions of years. Life does not consume resources — it participates in their circulation."
+    body: "Earth repeats on many timescales, from day and night to seasons and tides, and matter moves in loops. Those loops run at very different speeds. A carbon atom may pass through a leaf in a single season, yet stay locked in limestone for millions of years."
   },
   dynamic: {
-    label: "Constant Change",
+    label: "Continual Change",
+    linkTo: ["cycles", "limits"],
+    link: "Connects with cyclic processes and limits and boundaries. Seasons repeat, yet no two are alike, and disturbances such as fire reset limits by freeing nutrients and space.",
     title: "Dynamic Non-Equilibrium",
     color: "#4C1D95",
     border: "#7C3AED",
     bg: "#F5F3FF",
-    body: "Earth's living systems are never truly still. Populations fluctuate, climates shift, fire moves through forests, floods reshape rivers, species come and go. Stability in nature is not stasis — it is dynamic balance, maintained through continuous adjustment and response. Life does not resist change; it is shaped by change and thrives by responding to it. The most resilient organisms and ecosystems are not the most rigid, but the most adaptive."
+    body: "Earth's systems are continually changing. Seasons shift, fires burn, floods reshape rivers, and populations rise and fall. Ecosystems persist through many of these changes as organisms respond, recover, and reorganize."
   },
   limits: {
     label: "Finite Resources",
+    linkTo: ["cycles", "dynamic"],
+    link: "Connects with cyclic processes and dynamic non-equilibrium. Because matter is limited, life depends on reusing the same atoms, and a fire or flood can release locked-up nutrients and open space for new growth.",
     title: "Limits and Boundaries",
     color: "#881337",
     border: "#E11D48",
     bg: "#FFF1F2",
-    body: "Every ecosystem operates within boundaries. Territory, nutrients, sunlight, and water are finite. Organisms that thrive work within these limits, often turning scarcity into advantage. Coral reefs grow in nutrient-poor water yet support 25% of all marine species through nearly perfect recycling. Limits are the conditions that drove life's ingenuity."
+    body: "A plant with plenty of sunlight and water still needs nitrogen to grow. If nitrogen is scarce, adding more water will not by itself remove that limit. Different environments place different limits on living things."
   },
   gravity: {
     label: "Structuring Force",
+    linkTo: ["water", "sunlight"],
+    link: "Connects with water and sunlight. Water's buoyancy supports an animal against gravity, and reaching sunlight in a crowded forest means growing taller and heavier.",
     title: "Gravity",
     color: "#1E293B",
     border: "#475569",
     bg: "#F8FAFC",
-    body: "Gravity shapes every structure on Earth: how organisms are built, how they move, how they solve fundamental engineering challenges. A redwood distributes tons of weight through a circular cross-section and composite wood tissue refined over millions of years. Bamboo achieves towering height through hollow, segmented stems that flex without breaking. In water, 800 times denser than air, pressure increases rapidly with depth, shaping the bodies of deep-sea creatures entirely. Gravity is the constant that shaped how life is built."
+    body: "In water, buoyancy supports much of an animal's weight, which is one reason the largest animal alive today, the blue whale, lives in the sea. On land, legs, trunks, and stems must support weight against gravity. As a structure grows taller, the demands on its support increase."
   }
 };
 
-document.querySelectorAll('.node').forEach(node => {
-  node.addEventListener('click', () => {
+function openPanel(node) {
+  {
     const id = node.getAttribute('data-id');
     const d = data[id];
     const panel = document.getElementById('panel');
     document.getElementById('panel-label').textContent = d.label;
     document.getElementById('panel-title').textContent = d.title;
     document.getElementById('panel-body').textContent = d.body;
+    document.getElementById('panel-link').textContent = d.link;
+    document.querySelectorAll('.node').forEach(n => n.classList.remove('linked'));
+    d.linkTo.forEach(id => { const t = document.querySelector('.node[data-id="' + id + '"]'); if (t) t.classList.add('linked'); });
+    document.querySelectorAll('line.link').forEach(l => {
+      const on = (l.dataset.a === id && d.linkTo.includes(l.dataset.b)) || (l.dataset.b === id && d.linkTo.includes(l.dataset.a));
+      l.setAttribute('stroke', on ? d.border : '#e2e2e2');
+      l.setAttribute('stroke-width', on ? '3' : '1');
+    });
+    lastNode = node;
     panel.style.display = 'block';
     panel.style.borderColor = d.border;
     panel.style.background = d.bg;
-    document.getElementById('panel-title').style.color = d.color;
+    document.getElementById('panel-title').style.color = '#1a1a1a';
     document.getElementById('panel-label').style.color = d.border;
     panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+}
+document.querySelectorAll('.node').forEach(node => {
+  node.addEventListener('click', () => openPanel(node));
+  node.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openPanel(node); }
   });
 });
 
+let lastNode = null;
 function closePanel() {
+  document.querySelectorAll('line.link').forEach(l => { l.setAttribute('stroke', '#e2e2e2'); l.setAttribute('stroke-width', '1'); });
+  if (lastNode) lastNode.focus();
   document.getElementById('panel').style.display = 'none';
+  document.querySelectorAll('.node').forEach(n => n.classList.remove('linked'));
 }
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && document.getElementById('panel').style.display === 'block') closePanel(); });
 </script>
 </body>
 </html>
